@@ -20,3 +20,45 @@ Problem: Requirements were outdated which made errors in running it in PyCharm.
          - Implemented and replaced requirements with new version. Contributed, pulled, and updated repositories.
 Problem: Installing all the packages, cffi==1.15.1 unable to install. 
 Problem: Errors running code: 
+
+**Thursday, March 14th, 2024**
+@NIKOHLZ:
+Today I tried opening jarvis after updating the Requirement.txt because I noticed that a variety of different packages were outdated.
+Since last Friday, we compared the packages from the forked Jarvis-on-messenger repository with updated ones from a pull request on the original
+Jarvis-on-messenger repository from user/Swapagerwal. 
+These new requirements work better and install onto our local pycharm ide.
+
+PROBLEM:
+- After failing to run the "python Jarvis.py" command in the pycharm terminal, I analyzed the error messages, 
+  "Traceback (most recent call last):
+    File "C:\Users\nfuen034\PycharmProjects\TTA-Learning-Through-Jarvis\jarvis.py", line 8, in <module>
+      import modules
+    File "C:\Users\nfuen034\PycharmProjects\TTA-Learning-Through-Jarvis\modules\__init__.py", line 10, in <module>
+      from src import *
+  ModuleNotFoundError: No module named 'src'         "
+
+SOLUTION:
+The modules directory in this project/repository does in fact include a src directory that holds python files with the names of the possible
+queries to use with the application.
+  - My fix was to change the code in the "__init__.py" file that is inside the modules directory. The original said "import modules" (line 9)
+  and "from src import *" (line 10), but I felt that line 9 was the problem because \modules's import clearly wasn't accounting for src. I     made the following change: remove both lines 9 & 10, add at line 9 "from modules import *"
+
+This allowed me to run the "python jarvis.py" command successfully, and it worked to show me the hello page on a local host page!
+Tomorrow I plan to get one of the modules to run successfully so i can see how a user can interact with jarvis,
+and after accomplishing that, my team can start creating the "teach" module to see if we can allow a user to learn basic python facts/syntax/methods. 
+
+**Friday, March 15th, 2024**
+@NIKOHLZ:
+Shortly after logging progress with fixing the imports of the modules that was causing the jarvis.py compilation error, I went into trying to get at least one of the queries to work. I've yet to get one to launch fully, but I fixed an error that wasn't letting the jarvis application mock tests itself locally. 
+
+PROBLEM:
+When jarvis would open in a local host site, it would also have a debugger that would be opening instead of either the process or search of the query (http://localhost:5000/process/?q=<<YOUR_QUERY>>intent of the query, vs. http://localhost:5000/search/?q=<<YOUR_QUERY>> search result). 
+  - This debugger launches if the application has any errors, and in this case, when I tried to search or process a query, it would say that   there was an error in the config file. I had made changes while making fixes to the requirements.txt and trying to test a "lyric" module,     and this change did not include the following line to get WIT_LOCAL_DATA from the config file: 
+  "  # Local Testing WIT_LOCAL_DATA = 'local/wit.json'  "
+
+SOLUTION:
+After analyzing the debugger's messages, I noticed that the root of the problem was that the process_query function in the modules/__init__.py file was not working since it could not call back to the "open(config.WIT_LOCAL_DATA)" reference. This is because of the change I made to the config.py when pasting changes from a "lyric.py" debug posted by user/kalbhor under "Add lyrics module (#149)" in the original jarvis-on-messenger repository.
+  - I added the "# Local Testing WIT_LOCAL_DATA = 'local/wit.json'" code back into the config.py file and commited changes. The query       test worked to display null results. Very Exciting!
+
+Thoughts:
+I believe that you don't need it to mock test itself locally when it runs, but it is hard coded in its modules's __init__.py file under the process_query function. Maybe this is something I can look into, but I think that maybe this exists to be the skeleton for the process_query function that will be used to run/process results from other queries in the modules directory.

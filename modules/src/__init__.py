@@ -15,10 +15,8 @@ __all__ = [
     'movie',
     'music',
     'news',
-    'ping',
     'quote',
     'request',
-    'thanks',
     'time',
     'url',
     'video',
@@ -26,7 +24,6 @@ __all__ = [
     'wiki',
     'xkcd',
 ]
-
 # List of modules that send data personalized to the user
 __personalized__ = [
     'bye',
